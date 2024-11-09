@@ -8,6 +8,13 @@ type Props = {
 };
 
 const SearchResultCard = ({ restaurant }: Props) => {
+  // Format price as Nepali Rupees (NPR)
+  // Check if the price is in paise/cents and divide by 100, or if it's already in rupees, no division needed
+  const formattedPrice = new Intl.NumberFormat('ne-NP', {
+    style: 'currency',
+    currency: 'NPR',
+  }).format(restaurant.deliveryPrice / 100); // assuming the price is in paise/cent
+
   return (
     <Link
       to={`/detail/${restaurant._id}`}
@@ -26,7 +33,7 @@ const SearchResultCard = ({ restaurant }: Props) => {
         <div id="card-content" className="grid md:grid-cols-2 gap-2">
           <div className="flex flex-row flex-wrap">
             {restaurant.cuisines.map((item, index) => (
-              <span className="flex">
+              <span className="flex" key={index}>
                 <span>{item}</span>
                 {index < restaurant.cuisines.length - 1 && <Dot />}
               </span>
@@ -39,7 +46,7 @@ const SearchResultCard = ({ restaurant }: Props) => {
             </div>
             <div className="flex items-center gap-1">
               <Banknote />
-              Delivery from £{(restaurant.deliveryPrice / 100).toFixed(2)}
+              Delivery from {formattedPrice}
             </div>
           </div>
         </div>
